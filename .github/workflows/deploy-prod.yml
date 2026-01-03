@@ -28,7 +28,11 @@ jobs:
           rm: true
 
       - name: Pre-deploy health gate
-        run: curl -fsS http://${{ secrets.EC2_HOST }}:8000/health
+        env:
+          HEALTH_URL: http://${{ secrets.EC2_HOST }}:8000/health
+        run: |
+          echo "Checking health at $HEALTH_URL"
+          curl -fsS "$HEALTH_URL"
 
       - name: Deploy to PROD
         uses: appleboy/ssh-action@v1.0.0
