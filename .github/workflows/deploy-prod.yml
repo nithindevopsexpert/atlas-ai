@@ -1,0 +1,39 @@
+name: Atlas Prod Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Decode SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" | base64 -d > key.pem
+          chmod 600 key.pem
+
+      - name: Copy files to EC2 (clean)
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key_path: key.pem
+          source: "."
+          target: "/home/ubuntu/deploy"
+          rm: true
+
+      - name: Deploy to PROD
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key_path: key.pem
+          script: |
+            cd /home/ubuntu/deploy
+            chmod +x deploy.sh
+            ./deploy.sh platform/prod/values.env
