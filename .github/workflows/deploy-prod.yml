@@ -29,8 +29,10 @@ jobs:
 
       - name: Pre-deploy health gate
         env:
-          HEALTH_URL: http://${{ secrets.EC2_HOST }}:8000/health
+          RAW_HOST: ${{ secrets.EC2_HOST }}
         run: |
+          HOST=$(echo "$RAW_HOST" | tr -d '\n' | tr -d '\r')
+          HEALTH_URL="http://$HOST:8000/health"
           echo "Checking health at $HEALTH_URL"
           curl -fsS "$HEALTH_URL"
 
