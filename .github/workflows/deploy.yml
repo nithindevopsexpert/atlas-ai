@@ -35,7 +35,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key_path: key.pem
           script: |
-            cd /home/ubuntu/deploy/atlas
+            cd /home/ubuntu/deploy
+            REPO_DIR=$(ls -d */ | head -n 1)
+            cd "$REPO_DIR"
             chmod +x deploy.sh
             ./deploy.sh
 
