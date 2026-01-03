@@ -36,8 +36,7 @@ jobs:
           key_path: key.pem
           script: |
             cd /home/ubuntu/deploy
-            REPO_DIR=$(ls -d */ | head -n 1)
-            cd "$REPO_DIR"
+            ls
             chmod +x deploy.sh
             ./deploy.sh
 
