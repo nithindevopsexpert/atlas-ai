@@ -27,6 +27,10 @@ jobs:
           target: "/home/ubuntu/deploy"
           rm: true
 
+      - name: Pre-deploy health gate
+        run: |
+          curl -fsS http://${{ secrets.EC2_HOST }}:8000/health
+
       - name: Deploy to PROD
         uses: appleboy/ssh-action@v1.0.0
         with:
