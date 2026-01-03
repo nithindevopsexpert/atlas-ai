@@ -25,6 +25,8 @@ jobs:
           key_path: key.pem
           source: "."
           target: "/home/ubuntu/deploy"
+          rm: true
+
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v1.0.0
