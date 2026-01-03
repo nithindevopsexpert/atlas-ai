@@ -35,5 +35,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key_path: key.pem
           script: |
-            cd /home/ubuntu/deploy
+            cd /home/ubuntu/deploy/atlas
+            chmod +x deploy.sh
             ./deploy.sh
+
